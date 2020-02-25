@@ -1,0 +1,15 @@
+#!/bin/bash
+gn=groupname
+gmin=GID_MIN=1120
+gmax=GID_MAX=1130
+for server in `cat /tmp/scripts/AddorDell/servers`
+do
+		for gn in `cat /tmp/scripts/AddorDell/groupids`
+		do
+		echo --------------------------------------------------
+		echo Adding $gn to $server...
+		ssh $server groupadd -K $gmin -K $gmax $gn
+		echo Successfully created $gn group in server $server
+		echo --------------------------------------------------
+		done
+done
