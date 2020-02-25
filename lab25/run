@@ -1,0 +1,25 @@
+#!/bin/bash
+# just like to see the potential changes output to the terminal window.
+# "21s" indicates that we're searching line 17
+# ".*" indicates that we want to change the text of the entire line
+
+
+
+a="sed -i '21s/.*/server 129.6.15.28/' /etc/ntp.conf"
+b="sed -i '22s/.*/server 129.6.15.29/' /etc/ntp.conf"
+c="sed -i '/server 2.centos.pool.ntp.org iburst/d' /etc/ntp.conf"
+d="sed -i '/server 3.centos.pool.ntp.org iburst/d' /etc/ntp.conf"
+
+for eachserver in `cat /tmp/scripts/servers`
+do
+		ssh $eachserver yum remove -y chrony
+		ssh $eachserver yum install -y ntpd
+		ssh $eachserver systemctl enable ntpd
+		ssh $eachserver $a
+		ssh $eachserver $b
+		ssh $eachserver $c
+		ssh $eachserver $d
+		ssh $eachserver systemctl start ntpd
+		ssh $eachserver ntpdate -u 129.6.15.28
+done
+
